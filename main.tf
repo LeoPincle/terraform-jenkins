@@ -38,7 +38,7 @@ module "rds" {
   db_password    = var.db_password
 }
 
-module "app"{
+module "app-instance"{
   source = "./modules/app-instance"
   instance_type = var.instance_type
   private-sg = module.security-group.PrivateInstanceSG-sg
@@ -52,21 +52,22 @@ module "app-atg" {
 
 module "app-alb" {
   source = "./modules/app-alb"
-  internal-lb-sg = module.securitygroup.internal-lb-sg
+  internal-lb-sg = module.security-group.lb-sg
   pri_sub_3a_cidr = module.vpc.pri_sub_3a_id
   pri_sub_4b_cidr = module.vpc.pri_sub_4b_id
 }
 
 module "app-ami" {
   source = "./modules/app-ami"
-  instance_id = module.app-instance.app.id
+  instance_id = module.app-instance.app_instance_id
   app_instance = module.app-instance
 }
 
 module "app-ltp" {
   source = "./modules/app-ltp"
-  app_ami_id = module.app-ami.app-ami.id
+  app_ami_id = module.app-ami.app_ami_id
   PrivateInstanceSG = module.security-group.PrivateInstanceSG-sg
+  ec2_role = module.app-instance.ec2_role
 }
 
 module "app-asg" {
