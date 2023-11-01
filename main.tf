@@ -45,13 +45,13 @@ module "app"{
   pri_sub_3a_id = module.vpc.pri_sub_3a_id
 }
 
-module "atg" {
-  source = "./modules/atg"
+module "app-atg" {
+  source = "./modules/app-atg"
   aws_vpc = module.vpc.vpc_id
 } 
 
-module "alb" {
-  source = "./modules/alb"
+module "app-alb" {
+  source = "./modules/app-alb"
   internal-lb-sg = module.securitygroup.internal-lb-sg
   pri_sub_3a_cidr = module.vpc.pri_sub_3a_id
   pri_sub_4b_cidr = module.vpc.pri_sub_4b_id
@@ -63,8 +63,16 @@ module "app-ami" {
   app_instance = module.app-instance
 }
 
-module "app_launch_template" {
-  source = "./modules/ltp"
+module "app-ltp" {
+  source = "./modules/app-ltp"
   app_ami_id = module.app-ami.app-ami.id
   PrivateInstanceSG = module.security-group.PrivateInstanceSG-sg
+}
+
+module "app-asg" {
+  source = "./modules/app-asg"
+  app_launch_template = module.app-ltp.app_launch_template
+  pri_sub_3a = module.vpc.pri_sub_3a_id
+  pri_sub_4b = module.vpc.pri_sub_4b_id
+  AppTierTargetGroup = module.app-atg.AppTierTargetGroup
 }
