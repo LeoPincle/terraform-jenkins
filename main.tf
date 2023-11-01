@@ -1,5 +1,5 @@
 module "vpc" {
-    source = "../modules/vpc"
+    source = "./modules/vpc"
     region = var.region
     project_name = var.project_name
     vpc_cidr         = var.vpc_cidr
@@ -12,7 +12,7 @@ module "vpc" {
 }
 
 module "nat" {
-  source = "../modules/nat"
+  source = "./modules/nat"
 
   pub_sub_1a_id = module.vpc.pub_sub_1a_id
   igw_id        = module.vpc.igw_id
@@ -25,12 +25,12 @@ module "nat" {
 }
 
 module "security-group" {
-  source = "../modules/securitygroup"
+  source = "./modules/securitygroup"
   vpc_id = module.vpc.vpc_id
 }
 
 module "rds" {
-  source         = "../modules/rds"
+  source         = "./modules/rds"
   db_sg_id       = module.security-group.db-sg
   pri_sub_5a_id = module.vpc.pri_sub_5a_id
   pri_sub_6b_id = module.vpc.pri_sub_6b_id
@@ -39,13 +39,13 @@ module "rds" {
 }
 
 module "app"{
-  source = "../modules/app-instance"
+  source = "./modules/app-instance"
   instance_type = var.instance_type
   private-sg = module.security-group.PrivateInstanceSG-sg
   pri_sub_3a_id = module.vpc.pri_sub_3a_id
 }
 
 module "atg" {
-  source = "../modules/atg"
+  source = "./modules/atg"
   aws_vpc = module.vpc.vpc_id
 }
