@@ -34,9 +34,5 @@ resource "aws_instance" "app" {
   }
 }
 
-resource "aws_ami_from_instance" "app-ami" {
-  name = "app-ami"
-  source_instance_id = aws_instance.app.id
-  depends_on = [ aws_instance.app ]
-}
+
 

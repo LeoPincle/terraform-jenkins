@@ -56,3 +56,9 @@ module "alb" {
   pri_sub_3a_cidr = module.vpc.pri_sub_3a_id
   pri_sub_4b_cidr = module.vpc.pri_sub_4b_id
 }
+
+module "app-ami" {
+  source = "./modules/app-ami"
+  instance_id = module.app-instance.app.id
+  app_instance = module.app-instance
+}
