@@ -62,3 +62,9 @@ module "app-ami" {
   instance_id = module.app-instance.app.id
   app_instance = module.app-instance
 }
+
+module "app_launch_template" {
+  source = "./modules/ltp"
+  app_ami_id = module.app-ami.app-ami.id
+  PrivateInstanceSG = module.security-group.PrivateInstanceSG-sg
+}
