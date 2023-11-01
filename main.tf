@@ -49,3 +49,10 @@ module "atg" {
   source = "./modules/atg"
   aws_vpc = module.vpc.vpc_id
 } 
+
+module "alb" {
+  source = "./modules/alb"
+  internal-lb-sg = module.securitygroup.internal-lb-sg
+  pri_sub_3a_cidr = module.vpc.pri_sub_3a_id
+  pri_sub_4b_cidr = module.vpc.pri_sub_4b_id
+}
