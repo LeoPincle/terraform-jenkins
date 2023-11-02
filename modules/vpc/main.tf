@@ -16,10 +16,10 @@ resource "aws_internet_gateway" "internet_gateway" {
   }
 }
 
-resource "aws_internet_gateway_attachment" "internet_gateway_attachment" {
-  internet_gateway_id = aws_internet_gateway.internet_gateway.id
-  vpc_id = aws_vpc.vpc.id
-}
+#resource "aws_internet_gateway_attachment" "internet_gateway_attachment" {
+#  internet_gateway_id = aws_internet_gateway.internet_gateway.id
+#  vpc_id = aws_vpc.vpc.id
+#}
 
 data "aws_availability_zones" "available_zones"{}
 
