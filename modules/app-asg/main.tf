@@ -5,6 +5,7 @@ resource "aws_autoscaling_group" "app-asg" {
   max_size           = 2
   min_size           = 2
   load_balancers = [ var.AppTierTargetGroup ]
+  
   launch_template {
     id      = var.app_launch_template
     version = "$Latest"
