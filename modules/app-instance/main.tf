@@ -12,6 +12,10 @@ data "aws_ami" "amazon-linux-2" {
   }
 }
 
+locals {
+  endpoint = replace(var.endpoint, ":3306", "")
+}
+
 resource "aws_instance" "app" {
   instance_type = var.instance_type
   ami = data.aws_ami.amazon-linux-2.id
@@ -27,11 +31,18 @@ resource "aws_instance" "app" {
     nvm install 16
     nvm use 16
     npm install -g pm2
+    mysql -h ${local.endpoint} -u ${var.db_username} -p ${var.db_password}
+    CREATE DATABASE webappdb; 
+    USE webappdb; 
+    CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));   
+    INSERT INTO transactions (amount,description) VALUES ('400','groceries'); 
+    exit;
 	EOF
   key_name = "MyKey"
   tags = {
     Name = "App-instance"
   }
+  depends_on = [ var.rds_db_instance ]
 }
 
 

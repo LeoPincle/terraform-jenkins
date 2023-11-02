@@ -27,19 +27,3 @@ resource "aws_db_instance" "db" {
     Name = "project-db"
   }
 }
-
-resource "null_resource" "db_setup" {
-  provisioner "local-exec" {
-    command = <<-EOT
-      mysql -h ${aws_db_instance.db.endpoint} -u ${var.db_username}
-      CREATE DATABASE webappdb; 
-      USE webappdb; 
-      CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));   
-      INSERT INTO transactions (amount,description) VALUES ('400','groceries');   
-
-    EOT
-    environment = {
-      PGPASSWORD = "${var.db_password}"
-    }
-  }
-}

@@ -43,6 +43,10 @@ module "app-instance"{
   instance_type = var.instance_type
   private-sg = module.security-group.PrivateInstanceSG-sg
   pri_sub_3a_id = module.vpc.pri_sub_3a_id
+  db_username    = var.db_username
+  db_password    = var.db_password
+  endpoint = module.rds.rds_endpoint
+  rds_db_instance = module.rds.rds_db_instance
 }
 
 module "app-atg" {
