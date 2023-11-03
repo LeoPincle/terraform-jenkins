@@ -88,3 +88,9 @@ module "web-instance" {
   instance_type = var.instance_type
   pub_sub_1a_id = module.vpc.pub_sub_1a_id
 }
+
+module "web-ami" {
+  source = "./modules/web-ami"
+  web_instance_id = module.web-instance.web_instance_id
+  web_instance = module.web-instance.web_instance
+}
