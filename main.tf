@@ -81,3 +81,10 @@ module "app-asg" {
   pri_sub_4b = module.vpc.pri_sub_4b_id
   AppTierTargetGroup = module.app-atg.AppTierTargetGroup
 }
+
+module "web-instance" {
+  source = "./modules/web-instance"
+  web-tier-sg = module.security-group.web-sg
+  instance_type = var.instance_type
+  pub_sub_1a_id = module.vpc.pub_sub_1a_id
+}
