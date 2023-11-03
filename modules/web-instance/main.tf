@@ -12,7 +12,7 @@ data "aws_ami" "amazon-linux-2" {
   }
 }
 
-resource "aws_instance" "app" {
+resource "aws_instance" "web" {
   instance_type = var.instance_type
   associate_public_ip_address = true
   ami = data.aws_ami.amazon-linux-2.id
