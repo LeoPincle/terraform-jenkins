@@ -19,13 +19,13 @@ locals {
 resource "aws_instance" "app" {
   instance_type = var.instance_type
   ami = data.aws_ami.amazon-linux-2.id
-  security_groups =  [ var.private-sg ]
+  #security_groups =  [ var.private-sg ]
+  vpc_security_group_ids = [ var.private-sg ]
   subnet_id = var.pri_sub_3a_id
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
   user_data = <<-EOF
 		#!/bin/bash
-    sudo su -
-    sudo yum install mysql -y
+    yum install mysql -y
     echo ${var.db_password} > /root/.mysqlpw
     mysql -h ${local.endpoint} -u ${var.db_username} -p`cat /root/.mysqlpw `
     CREATE DATABASE webappdb; 
@@ -33,16 +33,17 @@ resource "aws_instance" "app" {
     CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));   
     INSERT INTO transactions (amount,description) VALUES ('400','groceries'); 
     exit; 
-    sudo yum install git -y
+
+    yum install git -y
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
     source ~/.bashrc
-    sudo nvm install 16
-    sudo nvm use 16
-    sudo npm install -g pm2
+    nvm install 16
+    nvm use 16
+    npm install -g pm2
     cd ~/
     aws s3 cp s3://project-ci-web-data/app-tier/ app-tier --recursive
     cd ~/app-tier
-    sudo npm install
+    npm install
     pm2 start index.js
     pm2 startup
     pm2 save
