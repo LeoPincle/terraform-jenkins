@@ -57,8 +57,8 @@ module "app-atg" {
 module "app-alb" {
   source = "./modules/app-alb"
   internal-lb-sg = module.security-group.lb-sg
-  pri_sub_3a_cidr = module.vpc.pri_sub_3a_id
-  pri_sub_4b_cidr = module.vpc.pri_sub_4b_id
+  pri_sub_3a_id = module.vpc.pri_sub_3a_id
+  pri_sub_4b_id = module.vpc.pri_sub_4b_id
 }
 
 module "app-ami" {
@@ -98,4 +98,17 @@ module "web-ami" {
 module "web-wtg" {
   source = "./modules/web-wtg"
   aws_vpc = module.vpc
+}
+
+module "web-alb" {
+  source = "./modules/web-alb"
+  internet-facing-alb-sg = module.security-group.internet-facing-alb-sg
+  pub_sub_1a_id = module.vpc.pub_sub_1a_id
+  pub_sub_2b_id = module.vpc.pub_sub_2b_id
+}
+
+module "web-alb-listener" {
+  source = "./modules/web-alb-listener"
+  web_lb_arn = module.web-alb.web_lb_arn
+  web_tier_tg_arn = module.web-wtg.web_tier_tg_arn
 }

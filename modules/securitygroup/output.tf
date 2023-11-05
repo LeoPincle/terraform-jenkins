@@ -1,4 +1,4 @@
-output "alb-sg" {
+output "internet-facing-alb-sg" {
   value = aws_security_group.internet-facing-alb-sg.id
 }
 
