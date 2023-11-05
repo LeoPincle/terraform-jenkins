@@ -112,3 +112,10 @@ module "web-alb-listener" {
   web_lb_arn = module.web-alb.web_lb_arn
   web_tier_tg_arn = module.web-wtg.web_tier_tg_arn
 }
+
+module "web-ltp" {
+  source = "./modules/web-ltp"
+  web_ami_id = module.web-ami.web_ami_id
+  web-tier-sg = module.security-group.web-sg
+  ec2_role = module.app-instance.ec2_role
+}
