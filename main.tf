@@ -95,3 +95,7 @@ module "web-ami" {
   web_instance = module.web-instance.web_instance
 }
 
+module "web-wtg" {
+  source = "./modules/web-wtg"
+  aws_vpc = module.vpc
+}
