@@ -119,3 +119,7 @@ module "web-ltp" {
   web-tier-sg = module.security-group.web-sg
   ec2_role = module.app-instance.ec2_role
 }
+
+module "s3-bucket" {
+  source = "./modules/s3-bucket"
+}
