@@ -75,6 +75,6 @@ locals {
 }
 
 resource "local_file" "nginx_configuration" {
-  filename = "../application-code/nginx.conf"
+  filename = "./application-code/nginx.conf"
   content = local.nginx_config
 }
