@@ -27,3 +27,19 @@ resource "aws_db_instance" "db" {
     Name = "project-db"
   }
 }
+
+locals {
+  db_config = <<-EOT
+    module.exports = Object.freeze({
+    DB_HOST : '${aws_db_instance.db.address}',
+    DB_USER : '${var.db_username}',
+    DB_PWD : '${var.db_password}',
+    DB_DATABASE : '${var.db_name}'
+    });
+  EOT
+}
+
+resource "local_file" "db_configuration" {
+  filename = "./application-code/app-tier/DbConfig.js"
+  content = local.db_config
+}

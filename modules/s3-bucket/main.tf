@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "example" {
+resource "aws_s3_bucket" "s3_project_bucket" {
   bucket = "project-ci-bucket-${random_id.random.hex}"
 }
 

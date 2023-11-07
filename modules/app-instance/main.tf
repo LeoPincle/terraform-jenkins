@@ -12,9 +12,9 @@ data "aws_ami" "amazon-linux-2" {
   }
 }
 
-locals {
-  endpoint = replace(var.endpoint, ":3306", "")
-}
+#locals {
+  #endpoint = replace(var.endpoint, ":3306", "")
+#}
 
 resource "aws_instance" "app" {
   instance_type = var.instance_type
@@ -27,7 +27,7 @@ resource "aws_instance" "app" {
 		#!/bin/bash
     yum install mysql -y
     echo ${var.db_password} > /root/.mysqlpw
-    mysql -h ${local.endpoint} -u ${var.db_username} -p`cat /root/.mysqlpw `
+    mysql -h ${var.endpoint} -u ${var.db_username} -p`cat /root/.mysqlpw `
     CREATE DATABASE webappdb; 
     USE webappdb; 
     CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));   

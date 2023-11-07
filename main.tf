@@ -123,3 +123,9 @@ module "web-ltp" {
 module "s3-bucket" {
   source = "./modules/s3-bucket"
 }
+
+module "s3-bucket-objects" {
+  source = "./modules/s3-bucket-objects"
+  s3_bucket = module.s3-bucket.s3_bucket
+  s3_bucket_id = module.s3-bucket.s3_bucket_id
+}
