@@ -37,6 +37,7 @@ locals {
     DB_DATABASE : '${var.db_name}'
     });
   EOT
+  depends_on = [ aws_db_instance.db ]
 }
 
 resource "local_file" "db_configuration" {
