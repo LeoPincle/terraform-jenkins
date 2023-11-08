@@ -40,7 +40,7 @@ resource "aws_instance" "web" {
       service nginx restart
       chmod -R 755 /home/ec2-user
       chkconfig nginx on
-  EOF
+      EOF
 }
 
 

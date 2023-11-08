@@ -7,7 +7,8 @@ resource "aws_autoscaling_group" "app-asg" {
   load_balancers = [ var.AppTierTargetGroup ]
   
   launch_template {
-    id      = var.app_launch_template
+    id = var.app_launch_template
     version = "$Latest"
   }
+  depends_on = [ var.app_launch_template ]
 }
