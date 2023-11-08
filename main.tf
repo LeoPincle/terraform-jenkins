@@ -47,6 +47,7 @@ module "app-instance"{
   db_password    = var.db_password
   endpoint = module.rds.rds_endpoint
   rds_db_instance = module.rds.rds_db_instance
+  s3_bucket = module.s3-bucket.s3_bucket_id
 }
 
 module "app-atg" {
@@ -87,6 +88,8 @@ module "web-instance" {
   web-tier-sg = module.security-group.web-sg
   instance_type = var.instance_type
   pub_sub_1a_id = module.vpc.pub_sub_1a_id
+  ec2-role = module.app-instance.ec2_role
+  s3_bucket = module.s3-bucket.s3_bucket_id
 }
 
 module "web-ami" {
@@ -97,7 +100,7 @@ module "web-ami" {
 
 module "web-wtg" {
   source = "./modules/web-wtg"
-  aws_vpc = module.vpc
+  aws_vpc = module.vpc.vpc_id
 }
 
 module "web-alb" {

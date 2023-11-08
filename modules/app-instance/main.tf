@@ -26,14 +26,6 @@ resource "aws_instance" "app" {
   user_data = <<-EOF
 		#!/bin/bash
     yum install mysql -y
-    echo ${var.db_password} > /root/.mysqlpw
-    mysql -h ${var.endpoint} -u ${var.db_username} -p`cat /root/.mysqlpw `
-    CREATE DATABASE webappdb; 
-    USE webappdb; 
-    CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));   
-    INSERT INTO transactions (amount,description) VALUES ('400','groceries'); 
-    exit; 
-
     yum install git -y
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
     source ~/.bashrc
@@ -41,12 +33,20 @@ resource "aws_instance" "app" {
     nvm use 16
     npm install -g pm2
     cd ~/
-    aws s3 cp s3://project-ci-web-data/app-tier/ app-tier --recursive
+    aws s3 cp s3://${var.s3_bucket}/app-tier/ app-tier --recursive
     cd ~/app-tier
     npm install
     pm2 start index.js
     pm2 startup
     pm2 save
+
+    echo ${var.db_password} > /root/.mysqlpw
+    mysql -h ${var.endpoint} -u ${var.db_username} -p`cat /root/.mysqlpw `
+    CREATE DATABASE webappdb; 
+    USE webappdb; 
+    CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));   
+    INSERT INTO transactions (amount,description) VALUES ('400','groceries'); 
+    exit; 
 	EOF
   key_name = "MyKey"
   tags = {

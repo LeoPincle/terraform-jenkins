@@ -5,3 +5,4 @@ variable "endpoint" {}
 variable "db_username" {}
 variable "db_password" {}
 variable "rds_db_instance" {}
+variable "s3_bucket" {}

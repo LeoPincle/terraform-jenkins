@@ -18,7 +18,7 @@ resource "aws_instance" "web" {
   ami = data.aws_ami.amazon-linux-2.id
   vpc_security_group_ids = [ var.web-tier-sg ]
   subnet_id = var.pub_sub_1a_id
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+  iam_instance_profile = var.ec2-role
   key_name = "MyKey"
   tags = {
     Name = "Web-instance"
@@ -29,14 +29,14 @@ resource "aws_instance" "web" {
       nvm install 16
       nvm use 16
       cd ~/
-      aws s3 cp s3://project-ci-web-data/web-tier/ web-tier --recursive
+      aws s3 cp s3://${var.s3_bucket}/web-tier/ web-tier --recursive
       cd ~/web-tier
       npm install 
       npm run build
       amazon-linux-extras install nginx1 -y
       cd /etc/nginx
       rm nginx.conf
-      aws s3 cp s3://project-ci-web-data/nginx.conf .
+      aws s3 cp s3://${var.s3_bucket}/nginx.conf .
       service nginx restart
       chmod -R 755 /home/ec2-user
       chkconfig nginx on
