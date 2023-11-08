@@ -51,16 +51,17 @@ resource "aws_iam_policy" "ec2_policy" {
     {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::project-ci-web-data"]
+      "Resource": ["arn:aws:s3:::${var.s3_bucket}"]
     },
     {
       "Effect": "Allow",
       "Action": [
         "s3:PutObject",
         "s3:GetObject",
-        "s3:DeleteObject"
+        "s3:DeleteObject",
+        "s3:List*"
       ],
-      "Resource": ["arn:aws:s3:::project-ci-web-data/*"]
+      "Resource": ["arn:aws:s3:::${var.s3_bucket}/*"]
     }
   ]
 })

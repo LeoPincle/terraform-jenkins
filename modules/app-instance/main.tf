@@ -41,12 +41,18 @@ resource "aws_instance" "app" {
     pm2 save
 
     echo ${var.db_password} > /root/.mysqlpw
-    mysql -h ${var.endpoint} -u ${var.db_username} -p`cat /root/.mysqlpw `
-    CREATE DATABASE webappdb; 
-    USE webappdb; 
-    CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));   
-    INSERT INTO transactions (amount,description) VALUES ('400','groceries'); 
-    exit; 
+
+    echo '#!/bin/bash' > db_script.sh
+    echo 'mysql -h ${var.endpoint} -u ${var.db_username} -p`cat /root/.mysqlpw ` ' >> db_script.sh
+    echo 'CREATE DATABASE webappdb;' >> db_script.sh 
+    echo 'USE webappdb;'  >> db_script.sh  
+    echo 'CREATE TABLE IF NOT EXISTS transactions(id INT NOT NULL AUTO_INCREMENT, amount DECIMAL(10,2), description VARCHAR(100), PRIMARY KEY(id));' >> db_script.sh    
+    echo 'INSERT INTO transactions (amount,description) VALUES ('400','groceries');' >> db_script.sh  
+    echo 'exit;' >> db_script.sh 
+
+    chmod u+x db_script.sh 
+    ./db_script.sh 
+
 	EOF
   key_name = "MyKey"
   tags = {
