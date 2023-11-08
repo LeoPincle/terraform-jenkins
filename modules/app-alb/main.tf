@@ -77,4 +77,5 @@ locals {
 resource "local_file" "nginx_configuration" {
   filename = "./application-code/nginx.conf"
   content = local.nginx_config
+  depends_on = [ aws_lb.app-tier-internal-lb ]
 }
