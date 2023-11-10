@@ -53,6 +53,7 @@ module "app-instance"{
 module "app-atg" {
   source = "./modules/app-atg"
   aws_vpc = module.vpc.vpc_id
+  depends_on = [ module.vpc ]
 } 
 
 module "app-alb" {
@@ -81,6 +82,7 @@ module "app-asg" {
   pri_sub_3a = module.vpc.pri_sub_3a_id
   pri_sub_4b = module.vpc.pri_sub_4b_id
   AppTierTargetGroup = module.app-atg.AppTierTargetGroup
+  depends_on = [ module.app-alb ]
 }
 
 module "web-instance" {
