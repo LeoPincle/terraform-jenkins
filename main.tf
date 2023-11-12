@@ -63,6 +63,12 @@ module "app-alb" {
   pri_sub_4b_id = module.vpc.pri_sub_4b_id
 }
 
+module "app-alb-listener" {
+  source = "./modules/app-alb-listener"
+  app_lb_arn = module.app-alb.app_lb_arn
+  app_tier_tg_arn = module.app-atg.app_tier_tg_arn 
+}
+
 module "app-ami" {
   source = "./modules/app-ami"
   instance_id = module.app-instance.app_instance_id
